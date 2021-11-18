@@ -6,9 +6,9 @@ class UserModel {
 
   UserModel({
     this.name,
-    required this.email,
-    required this.phone,
-    required this.uId,
+    this.email,
+    this.phone,
+    this.uId,
   });
   UserModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
