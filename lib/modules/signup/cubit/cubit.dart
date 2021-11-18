@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/models/user_model.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/modules/signup/cubit/states.dart';
 import 'package:social_app/shared/components/components.dart';
@@ -21,11 +23,33 @@ class RegisterCubit extends Cubit<RegisterStates> {
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      emit(RegisterSuccessesState());
       print(value.user!.email);
       print(value.user!.uid);
+      createUserData(
+          email: email, name: name, phone: phone, uId: value.user!.uid);
     }).catchError((error) {
       emit(RegisterErrorState(error));
+    });
+  }
+
+  void createUserData({
+    required String email,
+    required String name,
+    required String phone,
+    required String uId,
+  }) {
+    UserModel? userModel =
+        UserModel(name: , email: email, phone: phone, uId: uId);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .set(
+          userModel.toMap(),
+        )
+        .then((value) {
+      emit(UserCreateSuccessesState());
+    }).catchError((error) {
+      UserCreateErrorState(error.toString());
     });
   }
 

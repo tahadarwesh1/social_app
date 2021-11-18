@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/signup/cubit/cubit.dart';
 import 'package:social_app/modules/signup/cubit/states.dart';
 import 'package:social_app/shared/components/components.dart';
@@ -24,31 +25,8 @@ class SignUpScreen extends StatelessWidget {
         create: (BuildContext context) => RegisterCubit(),
         child: BlocConsumer<RegisterCubit, RegisterStates>(
           listener: (BuildContext context, state) {
-            if (state is RegisterSuccessesState) {
-              // if (state.loginModel.status) {
-              //   print(state.loginModel.message);
-              //   print(state.loginModel.data.token);
-              //   toast(
-              //     text: state.loginModel.message,
-              //     state: ToastStates.SUCCESS,
-              //   );
-              //   CacheHelper.saveData(
-              //     key: 'token',
-              //     value: state.loginModel.data.token,
-              //   ).then((value) {
-              //     token = state.loginModel.data.token;
-
-              //     navigateAndFinish(
-              //       context,
-              //       ShopLayout(),
-              //     );
-              //   });
-              // } else {
-              //   toast(
-              //     text: state.loginModel.message,
-              //     state: ToastStates.ERROR,
-              //   );
-              // }
+            if (state is UserCreateSuccessesState) {
+              navigateAndFinish(context, HomeLayout());
             }
           },
           builder: (BuildContext context, state) {

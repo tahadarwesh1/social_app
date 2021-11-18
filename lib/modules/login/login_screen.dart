@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/cubit/cubit.dart';
 import 'package:social_app/modules/login/cubit/states.dart';
 import 'package:social_app/modules/signup/signup_screen.dart';
@@ -24,6 +25,10 @@ class LoginScreen extends StatelessWidget {
         listener: (BuildContext context, state) {
           if (state is LoginErrorState) {
             toast(text: state.error, state: ToastStates.ERROR);
+          }
+
+          if (state is LoginSuccessState) {
+            navigateAndFinish(context, HomeLayout());
           }
         },
         builder: (BuildContext context, Object? state) {
