@@ -39,7 +39,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String uId,
   }) {
     UserModel? userModel =
-        UserModel(name: , email: email, phone: phone, uId: uId);
+        UserModel(name: name, email: email, phone: phone, uId: uId);
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
@@ -49,6 +49,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
         .then((value) {
       emit(UserCreateSuccessesState());
     }).catchError((error) {
+      print(error.toString());
       UserCreateErrorState(error.toString());
     });
   }

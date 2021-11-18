@@ -1,11 +1,11 @@
 class UserModel {
-  late String name;
-  late String email;
-  late String phone;
-  late String uId;
+  String? name;
+  String? email;
+  String? phone;
+  String? uId;
 
   UserModel({
-    required this.name,
+    this.name,
     required this.email,
     required this.phone,
     required this.uId,
