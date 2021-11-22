@@ -28,12 +28,13 @@ class LoginScreen extends StatelessWidget {
           }
 
           if (state is LoginSuccessState) {
-            navigateAndFinish(context, HomeLayout());
+            CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
+              navigateAndFinish(context, HomeLayout());
+            });
           }
         },
         builder: (BuildContext context, Object? state) {
           return Scaffold(
-            appBar: AppBar(),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(

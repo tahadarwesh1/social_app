@@ -1,24 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/states.dart';
-import 'package:social_app/shared/network/remote/dio_helper.dart';
+import 'package:social_app/models/user_model.dart';
+import 'package:social_app/modules/chats/chat_screen.dart';
+import 'package:social_app/modules/feeds/feeds_screen.dart';
+import 'package:social_app/modules/settings/settings_screen.dart';
+import 'package:social_app/modules/users/users_screen.dart';
+import 'package:social_app/shared/constants.dart';
 
-class LayoutCubit extends Cubit<LayoutStates> {
-  LayoutCubit() : super(LayoutInitialState());
+class SocialCubit extends Cubit<SocialStates> {
+  SocialCubit() : super(SocialInitialState());
 
-  static LayoutCubit get(context) => BlocProvider.of(context);
+  static SocialCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
-
-  List<Widget> screens = [];
+  List<Widget> screens = [
+    FeedsScreen(),
+    ChatScreen(),
+    UsersScreen(),
+    SettingsScreen(),
+  ];
+  List<String> titles = [
+    'News Feeds',
+    'Chats',
+    'Users',
+    'Settings',
+  ];
 
   void changeBottomNavBar(index) {
     currentIndex = index;
-    emit(LayoutBottomNavState());
+    emit(SocialBottomNavState());
   }
 
+  UserModel? userModel;
   void getUserData() {
-    emit(UserDataLoadingState());
+    emit(GetUserDataLoadingState());
+    FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
+      userModel = UserModel.fromJson(value.data()!);
+      print(value.data());
+      emit(GetUserDataSuccessState());
+    }).catchError((error) {
+      emit(GetUserDataErrorState(error));
+    });
 
     // DioHelper.getData(
     //   url: PROFILE,

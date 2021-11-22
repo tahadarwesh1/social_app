@@ -38,8 +38,13 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String phone,
     required String uId,
   }) {
-    UserModel? userModel =
-        UserModel(name: name, email: email, phone: phone, uId: uId);
+    UserModel? userModel = UserModel(
+      name: name,
+      email: email,
+      phone: phone,
+      uId: uId,
+      isVirified: false,
+    );
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)

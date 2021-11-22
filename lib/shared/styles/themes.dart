@@ -4,7 +4,7 @@ import 'package:social_app/shared/styles/colors.dart';
 
 ThemeData lightThem = ThemeData(
   appBarTheme: AppBarTheme(
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.orange,
     elevation: 0,
     titleTextStyle: TextStyle(
       color: Colors.black,
@@ -12,7 +12,7 @@ ThemeData lightThem = ThemeData(
       fontWeight: FontWeight.bold,
     ),
     systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
+      statusBarColor: Colors.orange,
     ),
     iconTheme: IconThemeData(
       color: Colors.black,

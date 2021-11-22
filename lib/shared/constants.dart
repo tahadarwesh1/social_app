@@ -1,4 +1,4 @@
-late String token;
+ String? uId;
 
 
 extension StringCasingExtension on String {

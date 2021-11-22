@@ -1,44 +1,30 @@
+abstract class SocialStates {}
 
-abstract class LayoutStates {}
+class SocialInitialState extends SocialStates {}
 
-class LayoutInitialState extends LayoutStates {}
+class SocialBottomNavState extends SocialStates {}
 
-class LayoutBottomNavState extends LayoutStates {}
+class SocialLoadingState extends SocialStates {}
 
-class LayoutLoadingState extends LayoutStates {}
+class SocialSuccessState extends SocialStates {}
 
-class LayoutSuccessState extends LayoutStates {}
+class SocialErrorState extends SocialStates {}
 
-class LayoutErrorState extends LayoutStates {}
 
-class CateogriesSuccessState extends LayoutStates {}
+class GetUserDataSuccessState extends SocialStates {}
 
-class CateogriesErrorState extends LayoutStates {}
+class GetUserDataErrorState extends SocialStates {
+  final error;
+  GetUserDataErrorState(this.error);
+}
 
-class ChangeFavoritesSuccessState extends LayoutStates {}
+class GetUserDataLoadingState extends SocialStates {}
 
-class ChangeFavoritesErrorState extends LayoutStates {}
-
-class GetFavoritesSuccessState extends LayoutStates {}
-
-class GetFavoritesErrorState extends LayoutStates {}
-
-class GetFavoritesLoadingState extends LayoutStates {}
-
-class ChangeFavoritesLoadingState extends LayoutStates {}
-
-class UserDataSuccessState extends LayoutStates {}
-
-class UserDataErrorState extends LayoutStates {}
-
-class UserDataLoadingState extends LayoutStates {}
-
-class UserUpdateDataSuccessState extends LayoutStates {
-
+class UserUpdateDataSuccessState extends SocialStates {
 //   LoginModel loginModel;
 //   UserUpdateDataSuccessState(this.loginModel);
 }
 
-class UserUpdateDataErrorState extends LayoutStates {}
+class UserUpdateDataErrorState extends SocialStates {}
 
-class UserUpdateDataLoadingState extends LayoutStates {}
+class UserUpdateDataLoadingState extends SocialStates {}

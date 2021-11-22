@@ -112,3 +112,14 @@ Color chooseToastColor(ToastStates state) {
   }
   return color;
 }
+
+Widget defaultTextButton(
+    {required String title, required void Function()? onPressed}) {
+  return TextButton(
+    onPressed: onPressed,
+    child: Text(
+      title,
+      style: TextStyle(color: Colors.blue),
+    ),
+  );
+}
