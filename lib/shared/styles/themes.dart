@@ -26,5 +26,19 @@ ThemeData lightThem = ThemeData(
     type: BottomNavigationBarType.fixed,
   ),
   primarySwatch: defaultColor,
+  textTheme: TextTheme(
+    subtitle1: TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+      height: 1.3,
+      
+    ),
+    bodyText1: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+  ),
   fontFamily: 'jannah',
 );
