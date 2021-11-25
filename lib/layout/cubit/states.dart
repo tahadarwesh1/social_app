@@ -3,6 +3,7 @@ abstract class SocialStates {}
 class SocialInitialState extends SocialStates {}
 
 class SocialBottomNavState extends SocialStates {}
+class AddNewPostState extends SocialStates {}
 
 class SocialLoadingState extends SocialStates {}
 

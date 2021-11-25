@@ -6,6 +6,7 @@ import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/models/user_model.dart';
 import 'package:social_app/modules/chats/chat_screen.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
+import 'package:social_app/modules/new_post/new_post_screen.dart';
 import 'package:social_app/modules/settings/settings_screen.dart';
 import 'package:social_app/modules/users/users_screen.dart';
 import 'package:social_app/shared/constants.dart';
@@ -19,19 +20,25 @@ class SocialCubit extends Cubit<SocialStates> {
   List<Widget> screens = [
     FeedsScreen(),
     ChatScreen(),
+    NewPostScreen(),
     UsersScreen(),
     SettingsScreen(),
   ];
   List<String> titles = [
     'News Feeds',
     'Chats',
+    'Post',
     'Users',
     'Settings',
   ];
 
   void changeBottomNavBar(index) {
-    currentIndex = index;
-    emit(SocialBottomNavState());
+    if (index == 2) {
+      emit(AddNewPostState());
+    } else {
+      currentIndex = index;
+      emit(SocialBottomNavState());
+    }
   }
 
   UserModel? userModel;
