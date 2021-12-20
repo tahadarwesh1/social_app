@@ -23,6 +23,7 @@ ThemeData lightThem = ThemeData(
     elevation: 1.0,
     selectedItemColor: defaultColor,
     unselectedItemColor: Colors.grey,
+    
     type: BottomNavigationBarType.fixed,
   ),
   primarySwatch: defaultColor,
@@ -32,10 +33,9 @@ ThemeData lightThem = ThemeData(
       fontWeight: FontWeight.w600,
       color: Colors.black,
       height: 1.3,
-      
     ),
     bodyText1: TextStyle(
-      fontSize: 16,
+      fontSize: 19,
       fontWeight: FontWeight.w600,
       color: Colors.black,
     ),

@@ -26,7 +26,11 @@ class RegisterCubit extends Cubit<RegisterStates> {
       print(value.user!.email);
       print(value.user!.uid);
       createUserData(
-          email: email, name: name, phone: phone, uId: value.user!.uid);
+        email: email,
+        name: name,
+        phone: phone,
+        uId: value.user!.uid,
+      );
     }).catchError((error) {
       emit(RegisterErrorState(error));
     });
@@ -43,6 +47,11 @@ class RegisterCubit extends Cubit<RegisterStates> {
       email: email,
       phone: phone,
       uId: uId,
+      image:
+          'https://image.freepik.com/free-photo/portrait-successful-man-having-stubble-posing-with-broad-smile-keeping-arms-folded_171337-1267.jpg',
+      cover:
+          'https://image.freepik.com/free-photo/serious-man-isolated-orange-background-confident-person-looking-camera_482257-25138.jpg',
+      bio: 'Write your bio here ...',
       isVirified: false,
     );
     FirebaseFirestore.instance
@@ -52,7 +61,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
           userModel.toMap(),
         )
         .then((value) {
-      emit(UserCreateSuccessesState());
+      emit(UserCreateSuccessesState(uId));
     }).catchError((error) {
       print(error.toString());
       UserCreateErrorState(error.toString());
@@ -68,11 +77,5 @@ class RegisterCubit extends Cubit<RegisterStates> {
     suffixIcon =
         isPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined;
     emit(RegisterPasswordVisibilityState());
-  }
-
-  void signOut(context) {
-    CacheHelper.removeData(key: 'token').then((value) {
-      navigateAndFinish(context, LoginScreen());
-    });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_app/shared/styles/colors.dart';
+import 'package:social_app/shared/styles/icon_broken.dart';
 
 void navigateTo(context, widget) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
@@ -15,6 +16,7 @@ Widget defaultTextField({
   required TextInputType keyboardType,
   required TextEditingController controller,
   required String label,
+  String? hintText,
   required IconData prefixIcon,
   required String? Function(String?)? validator,
   void Function(String)? onFieldSubmitted,
@@ -37,9 +39,11 @@ Widget defaultTextField({
           label: Text(
             label,
           ),
+          
           prefixIcon: Icon(
             prefixIcon,
           ),
+          hintText: hintText,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(
               20.0,
@@ -69,7 +73,7 @@ Widget defaultButton({
 }) =>
     MaterialButton(
       minWidth: double.infinity,
-      height: 50.0,
+      height: 40.0,
       color: defaultColor,
       onPressed: onPressed,
       child: Text(
@@ -123,3 +127,24 @@ Widget defaultTextButton(
     ),
   );
 }
+
+PreferredSizeWidget? defaultAppBar({
+  required BuildContext context,
+  String? title,
+  List<Widget>? actions,
+}) =>
+    AppBar(
+      title: Text(
+        '$title',
+      ),
+      titleSpacing: 0.0,
+      actions: actions,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(
+          IconBroken.Arrow___Left_2,
+        ),
+      ),
+    );

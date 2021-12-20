@@ -1,65 +1,80 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/cubit.dart';
+import 'package:social_app/layout/cubit/states.dart';
+import 'package:social_app/models/post_model.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
-  const FeedsScreen({Key? key}) : super(key: key);
-
+  FeedsScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            elevation: 10.0,
-            margin: EdgeInsets.all(8.0),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
+    return BlocConsumer<SocialCubit, SocialStates>(
+      listener: (BuildContext context, state) {},
+      builder: (BuildContext context, Object? state) {
+        return ConditionalBuilder(
+          condition: SocialCubit.get(context).posts.isNotEmpty,
+          builder: (context) => SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
               children: [
-                Image(
-                  height: 200.0,
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    'https://image.freepik.com/free-photo/inspired-young-man-denim-shirt-asks-pay-attention-something-very-interesting_295783-1218.jpg',
-                  ),
-                  width: double.infinity,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Communicate with your friends',
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                          color: Colors.white,
+                Card(
+                  elevation: 10.0,
+                  margin: EdgeInsets.all(8.0),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      Image(
+                        height: 200.0,
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          'https://image.freepik.com/free-photo/inspired-young-man-denim-shirt-asks-pay-attention-something-very-interesting_295783-1218.jpg',
                         ),
+                        width: double.infinity,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Communicate with your friends',
+                          style:
+                              Theme.of(context).textTheme.subtitle1!.copyWith(
+                                    color: Colors.white,
+                                  ),
+                        ),
+                      ),
+                    ],
                   ),
-                )
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => buildPostItem(
+                      SocialCubit.get(context).posts[index], context, index),
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 8.0,
+                  ),
+                  itemCount: SocialCubit.get(context).posts.length,
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
               ],
             ),
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => buildPostItem(context),
-            separatorBuilder: (context, index) => SizedBox(
-              height: 8.0,
-            ),
-            itemCount: 10,
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-        ],
-      ),
+          fallback: (context) => Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 }
 
-Widget buildPostItem(context) => Card(
+var commentController = TextEditingController();
+
+Widget buildPostItem(PostModel model, context, index) => Card(
       elevation: 5.0,
       margin: EdgeInsets.symmetric(
         horizontal: 8.0,
@@ -68,13 +83,13 @@ Widget buildPostItem(context) => Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 CircleAvatar(
                   radius: 28.0,
-                  backgroundImage: NetworkImage(
-                      'https://image.freepik.com/free-photo/praying-male-begging-bearded-guy-with-blond-hairstyle-wearing-green-t-shirt-has-tattoos-holds-palms-together-plead-isolated-yellow-wall_295783-14320.jpg'),
+                  backgroundImage: NetworkImage('${model.image}'),
                 ),
                 SizedBox(
                   width: 10.0,
@@ -86,7 +101,7 @@ Widget buildPostItem(context) => Card(
                       Row(
                         children: [
                           Text(
-                            'Taha Darwish',
+                            '${model.name}',
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                           SizedBox(
@@ -100,7 +115,7 @@ Widget buildPostItem(context) => Card(
                         ],
                       ),
                       Text(
-                        DateTime.now().toString(),
+                        model.dateTime.toString(),
                         style: Theme.of(context).textTheme.caption,
                       )
                     ],
@@ -116,72 +131,65 @@ Widget buildPostItem(context) => Card(
               ],
             ),
             SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              height: 1.0,
-              width: double.infinity,
-              color: Colors.grey,
-            ),
-            SizedBox(
-              height: 10.0,
+              height: 15.0,
             ),
             Text(
-              'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable',
+              '${model.text}',
               style: Theme.of(context).textTheme.subtitle1,
             ),
-            Container(
-              width: double.infinity,
-              height: 20.0,
-              child: Wrap(
-                children: [
-                  Container(
-                    height: 25,
-                    child: MaterialButton(
-                      minWidth: 1,
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      child: Text(
-                        '#flutter',
-                        style: Theme.of(context).textTheme.caption!.copyWith(
-                              color: Colors.blue,
-                            ),
+            // Container(
+            //   width: double.infinity,
+            //   height: 20.0,
+            //   child: Wrap(
+            //     children: [
+            //       Container(
+            //         height: 25,
+            //         child: MaterialButton(
+            //           minWidth: 1,
+            //           padding: EdgeInsets.zero,
+            //           onPressed: () {},
+            //           child: Text(
+            //             '#flutter',
+            //             style: Theme.of(context).textTheme.caption!.copyWith(
+            //                   color: Colors.blue,
+            //                 ),
+            //           ),
+            //         ),
+            //       ),
+            //       Container(
+            //         height: 25,
+            //         child: MaterialButton(
+            //           onPressed: () {},
+            //           child: Text(
+            //             '#flutter',
+            //             style: Theme.of(context).textTheme.caption!.copyWith(
+            //                   color: Colors.blue,
+            //                 ),
+            //           ),
+            //           minWidth: 1,
+            //           padding: EdgeInsets.zero,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            if (model.postImage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Container(
+                  height: 160.0,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        '${model.postImage}',
                       ),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  Container(
-                    height: 25,
-                    child: MaterialButton(
-                      onPressed: () {},
-                      child: Text(
-                        '#flutter',
-                        style: Theme.of(context).textTheme.caption!.copyWith(
-                              color: Colors.blue,
-                            ),
-                      ),
-                      minWidth: 1,
-                      padding: EdgeInsets.zero,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              height: 160.0,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                image: DecorationImage(
-                  image: NetworkImage(
-                    'https://image.freepik.com/free-photo/surprised-excited-young-bearded-man-plaid-shirt-with-opened-mouth-shouting-pointing-up-sky-with-both-hands-yellow-wall_295783-14364.jpg',
-                  ),
-                  fit: BoxFit.cover,
                 ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 7.0),
               child: Row(
@@ -204,7 +212,7 @@ Widget buildPostItem(context) => Card(
                               width: 5.0,
                             ),
                             Text(
-                              '1200',
+                              '${SocialCubit.get(context).likes[index]}',
                               style: Theme.of(context).textTheme.caption,
                             ),
                           ],
@@ -231,7 +239,14 @@ Widget buildPostItem(context) => Card(
                               width: 5.0,
                             ),
                             Text(
-                              '120 comment',
+                              '0',
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Text(
+                              'comment',
                               style: Theme.of(context).textTheme.caption,
                             ),
                           ],
@@ -245,36 +260,47 @@ Widget buildPostItem(context) => Card(
             Container(
               height: 1.0,
               width: double.infinity,
-              color: Colors.grey,
+              color: Colors.grey[300],
             ),
             SizedBox(
-              height: 10.0,
+              height: 5.0,
             ),
             Row(
               children: [
                 Expanded(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 18.0,
-                          backgroundImage: NetworkImage(
-                              'https://image.freepik.com/free-photo/praying-male-begging-bearded-guy-with-blond-hairstyle-wearing-green-t-shirt-has-tattoos-holds-palms-together-plead-isolated-yellow-wall_295783-14320.jpg'),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 18.0,
+                        backgroundImage: NetworkImage(
+                            '${SocialCubit.get(context).userModel!.image}'),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: commentController,
+                          onFieldSubmitted: (value) {
+                            SocialCubit.get(context).commentPost(
+                                SocialCubit.get(context).postsId[index],
+                                commentController.text);
+                            commentController.clear();
+                          },
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Write a comment ...',
+                          ),
                         ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text(
-                          'Write a comment ...',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    SocialCubit.get(context)
+                        .likePost(SocialCubit.get(context).postsId[index]);
+                  },
                   child: Row(
                     children: [
                       Icon(

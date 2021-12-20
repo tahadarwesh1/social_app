@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/modules/new_post/new_post_screen.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
 class HomeLayout extends StatelessWidget {
@@ -37,33 +39,37 @@ class HomeLayout extends StatelessWidget {
               ),
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
+          bottomNavigationBar: ConvexAppBar(
             onTap: (index) {
               cubit.changeBottomNavBar(index);
             },
+            backgroundColor: defaultColor,
+            style: TabStyle.flip,
             items: [
-              BottomNavigationBarItem(
+              TabItem(
+                
                 icon: Icon(IconBroken.Home),
-                label: 'Home',
+                title: 'Home',
               ),
-              BottomNavigationBarItem(
+              TabItem(
                 icon: Icon(IconBroken.Chat),
-                label: 'Chat',
+                title: 'Chat',
               ),
-              BottomNavigationBarItem(
+              TabItem(
                 icon: Icon(IconBroken.Paper_Upload),
-                label: 'Post',
+                title: 'Post',
               ),
-              BottomNavigationBarItem(
+              TabItem(
                 icon: Icon(IconBroken.User),
-                label: 'Users',
+                title: 'Users',
               ),
-              BottomNavigationBarItem(
+              TabItem(
                 icon: Icon(IconBroken.Setting),
-                label: 'Settings',
+                title: 'Settings',
               ),
             ],
-            currentIndex: cubit.currentIndex,
+            initialActiveIndex: cubit.currentIndex,
+            
           ),
           body: cubit.screens[cubit.currentIndex],
         );

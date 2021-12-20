@@ -26,7 +26,9 @@ class SignUpScreen extends StatelessWidget {
         child: BlocConsumer<RegisterCubit, RegisterStates>(
           listener: (BuildContext context, state) {
             if (state is UserCreateSuccessesState) {
-              navigateAndFinish(context, HomeLayout());
+              CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
+                navigateAndFinish(context, HomeLayout());
+              });
             }
           },
           builder: (BuildContext context, state) {

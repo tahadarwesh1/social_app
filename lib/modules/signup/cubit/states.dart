@@ -12,7 +12,10 @@ class RegisterErrorState extends RegisterStates {
   RegisterErrorState(this.error);
 }
 
-class UserCreateSuccessesState extends RegisterStates {}
+class UserCreateSuccessesState extends RegisterStates {
+  final String uId;
+  UserCreateSuccessesState(this.uId);
+}
 
 class UserCreateErrorState extends RegisterStates {
   final String error;

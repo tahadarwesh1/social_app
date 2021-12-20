@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/constants.dart';
 import 'package:social_app/shared/cubit/cubit.dart';
 import 'package:social_app/shared/cubit/states.dart';
@@ -12,6 +14,10 @@ import 'package:social_app/shared/network/bloc_observer.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/themes.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  toast(text: 'Background message', state: ToastStates.SUCCESS);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +27,18 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   Widget widget = LoginScreen();
 
+  var token = await FirebaseMessaging.instance.getToken();
+  print(token);
+  FirebaseMessaging.onMessage.listen((event) {
+    print(event.data.toString());
+    toast(text: 'on message', state: ToastStates.SUCCESS);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.data.toString());
+    toast(text: 'opened app message', state: ToastStates.SUCCESS);
+  });
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   uId = CacheHelper.getData(key: 'uId');
   if (uId != null) {
     widget = HomeLayout();
@@ -46,7 +64,9 @@ class MyApp extends StatelessWidget {
           create: (context) => AppCubit(),
         ),
         BlocProvider(
-          create: (BuildContext context) => SocialCubit()..getUserData(),
+          create: (BuildContext context) => SocialCubit()
+            ..getUserData()
+            ..getPosts(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
