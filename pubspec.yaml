@@ -49,6 +49,7 @@ dependencies:
   firebase_storage: ^10.1.0
   firebase_messaging: ^11.2.4
   firebase_analytics: ^9.0.4
+  animated_splash_screen: ^1.1.0
 
 
 dev_dependencies:
@@ -74,6 +75,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
 
   fonts:
     - family: IconBroken

@@ -1,3 +1,5 @@
+
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
+import 'package:social_app/modules/splash_screen/splash_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/constants.dart';
 import 'package:social_app/shared/cubit/cubit.dart';
@@ -75,7 +78,14 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: lightThem,
-            home: startWidget,
+            home: AnimatedSplashScreen(
+              splash: SplashScreen(),
+              backgroundColor: defaultColor,
+              nextScreen: startWidget,
+              splashIconSize: 250,
+              splashTransition: SplashTransition.scaleTransition,
+              animationDuration: Duration(milliseconds: 2000),
+            ),
           );
         },
       ),
